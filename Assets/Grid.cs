@@ -11,7 +11,8 @@ public class Grid : MonoBehaviour {
     private Node[,] m_grid;
     private int gridWidth, gridHeight;
 
-    public List<Node> path;
+    //public List<Node> path;
+    public Stack<Node> path;
     public int maxSize {  get { return gridWidth * gridHeight; } }
 
 	void Start ()
@@ -23,13 +24,31 @@ public class Grid : MonoBehaviour {
         CreateGrid();
     }
 
+    float counter = 0;
+    Node prevNode = null;
     void Update()
     {
-        if(path.Count > 0)
+        if (path != null)
         {
-            foreach(Node n in path)
+            if (path.Count > 0)
             {
-                n.SetColour(Colors.Orange);
+                //foreach(Node n in path)
+                //{
+                //    n.SetColour(Colors.Orange);
+                //}
+
+                if (counter >= 0.4f)
+                {
+                    counter = 0;
+                    if (prevNode != null)
+                    {
+                        prevNode.ResetColour();
+                    }
+
+                    prevNode = path.Pop();
+                    prevNode.SetColour(Colors.Orange);
+                }
+                counter += Time.deltaTime;
             }
         }
     }
@@ -84,6 +103,8 @@ public class Grid : MonoBehaviour {
     {
         List<Node> neighbours = new List<Node>();
 
+        /*
+        // Getting all the neighbours including diagonal neighbours
         for (int x = -1; x <= 1; x++)
         {
             for (int y = -1; y <= 1; y++)
@@ -99,6 +120,25 @@ public class Grid : MonoBehaviour {
                 }
             }
         }
+        */
+
+        // Get only vertical and horizontal neighbours
+        for (int x = -1; x <= 1; x++)
+        {
+            for (int y = -1; y <= 1; y++)
+            {
+                if ((x == 0 && y == 0) || (Mathf.Abs(x) == 1 && Mathf.Abs(y) == 1))
+                    continue;
+                int checkX = node.gridX + x;
+                int checkY = node.gridY + y;
+
+                if (checkX >= 0 && checkX < gridWidth && checkY >= 0 && checkY < gridHeight)
+                {
+                    neighbours.Add(m_grid[checkX, checkY]);
+                }
+            }
+        }
+
         return neighbours;
     }
 }

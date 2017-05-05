@@ -57,16 +57,19 @@ public class Pathfinding : MonoBehaviour {
 
     private void RetracePath(Node startNode, Node endNode)
     {
-        List<Node> path = new List<Node>();
+        //List<Node> path = new List<Node>();
+        Stack<Node> path = new Stack<Node>();
         Node currentNode = endNode;
 
         while(currentNode != startNode)
         {
-            path.Add(currentNode);
+            //path.Add(currentNode);
+            path.Push(currentNode);
             currentNode = currentNode.parent;
         }
 
-        path.Reverse();
+        //path.Reverse();
+        
 
         m_grid.path = path;
     }
@@ -99,6 +102,8 @@ public class Pathfinding : MonoBehaviour {
         }
         else
         {
+            startNode.ResetColour();
+            endNode.ResetColour();
             startNode = node;
             endNode = null;
             node.SetColour(Colors.Red);

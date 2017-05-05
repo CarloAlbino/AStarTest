@@ -84,4 +84,24 @@ public class Node : MonoBehaviour, IHeapItem<Node> {
         newColor.a = 0.5f;
         m_spriteRenderer.color += newColor;
     }
+
+    public void ResetColour()
+    {
+        switch (nodeType)
+        {
+            case ENodeTypes.Floor:
+                m_spriteRenderer.color = Colors.ForestGreen;
+                break;
+            case ENodeTypes.Water:
+                m_spriteRenderer.color = Colors.DodgerBlue;
+                break;
+            case ENodeTypes.Wall:
+                m_spriteRenderer.color = Colors.DarkGray;
+                break;
+            case ENodeTypes.None:
+            default:
+                m_spriteRenderer.color = Colors.NavajoWhite;
+                break;
+        }
+    }
 }
